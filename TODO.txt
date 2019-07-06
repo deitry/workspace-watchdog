@@ -1,0 +1,2 @@
+- Do not override other text background highlighting - like when text is selected
+- Change background of editor itself, not the text background - I didn't find such VSCode API yet
