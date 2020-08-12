@@ -7,10 +7,12 @@ const bkgColorProperty = "backgroundColor";
 const extNs = "workspaceWatchdog"; // extensionNamespace
 const nsBkgColorProperty = extNs + '.' + bkgColorProperty;
 
-class Config {
+class Config
+{
 	bkgColor: string;
 
-	constructor() {
+	constructor()
+	{
 		var conf = vscode.workspace.getConfiguration(extNs);
 
 		if (!conf)
@@ -23,14 +25,17 @@ class Config {
 	}
 }
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext)
+{
 
 	var config = new Config();
 
-	var updateColor = function (e: vscode.TextEditor | undefined) {
+	var updateColor = function (e: vscode.TextEditor | undefined)
+	{
 		if (e == undefined
 			|| e.document == undefined
-			|| e.viewColumn == undefined) {
+			|| e.viewColumn == undefined)
+		{
 			// e.viewColumn is undefined for vscode special editors like one in Output pane
 			return;
 		}
@@ -39,7 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.workspace.asRelativePath(e.document.uri.path, false);
 
 		// if returned value same as input then file is outside workspace
-		if (relPath == e.document.uri.path) {
+		if (relPath == e.document.uri.path)
+		{
 
 			// TODO: set up REAL background of editor
 
@@ -63,14 +69,17 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
-	var refreshAll = function () {
+	var refreshAll = function ()
+	{
 		// Refresh color for already opened editors
 		for (var e of vscode.window.visibleTextEditors)
 			updateColor(e);
 	};
 
-	vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) => {
-		if (e.affectsConfiguration(extNs)) {
+	vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) =>
+	{
+		if (e.affectsConfiguration(extNs))
+		{
 			// Reload configuration
 			config = new Config();
 			refreshAll();
