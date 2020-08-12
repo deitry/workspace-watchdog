@@ -4,16 +4,19 @@
 import * as vscode from 'vscode';
 
 const bkgColorProperty = "backgroundColor";
-const extNs = "workspaceWatchdog"; // extensionNamespace
-const nsBkgColorProperty = extNs + '.' + bkgColorProperty;
+const includeProperty = "includeFolders";
+const excludeProperty = "excludeFolders";
+const extensionNamespace = "workspaceWatchdog";
 
 class Config
 {
 	bkgColor: string;
+	includeFolders?: string[];
+	excludeFolders?: string[];
 
 	constructor()
 	{
-		var conf = vscode.workspace.getConfiguration(extNs);
+		let conf = vscode.workspace.getConfiguration(extensionNamespace);
 
 		if (!conf)
 			throw new Error("Missed Workspace Watchdog configuration");
@@ -22,15 +25,27 @@ class Config
 			bkgColorProperty,
 			"rgba(65,65,85,1)"
 		);
+
+		if (conf.has(includeProperty))
+			this.includeFolders = conf.get(includeProperty);
+
+		if (conf.has(excludeProperty))
+			this.excludeFolders = conf.get(excludeProperty)
+	}
+
+	isFileIncluded(path: string)
+	{
+		let relPath: string = vscode.workspace.asRelativePath(path, false);
+
+		return relPath == path;
 	}
 }
 
 export function activate(context: vscode.ExtensionContext)
 {
+	let config = new Config();
 
-	var config = new Config();
-
-	var updateColor = function (e: vscode.TextEditor | undefined)
+	let updateColor = function (e: vscode.TextEditor | undefined)
 	{
 		if (e == undefined
 			|| e.document == undefined
@@ -40,13 +55,9 @@ export function activate(context: vscode.ExtensionContext)
 			return;
 		}
 
-		var relPath: string =
-			vscode.workspace.asRelativePath(e.document.uri.path, false);
-
 		// if returned value same as input then file is outside workspace
-		if (relPath == e.document.uri.path)
+		if (config.isFileIncluded(e.document.uri.path))
 		{
-
 			// TODO: set up REAL background of editor
 
 			// This actually applies to background only where the text is
@@ -69,7 +80,7 @@ export function activate(context: vscode.ExtensionContext)
 		}
 	};
 
-	var refreshAll = function ()
+	let refreshAll = function ()
 	{
 		// Refresh color for already opened editors
 		for (var e of vscode.window.visibleTextEditors)
@@ -78,7 +89,7 @@ export function activate(context: vscode.ExtensionContext)
 
 	vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) =>
 	{
-		if (e.affectsConfiguration(extNs))
+		if (e.affectsConfiguration(extensionNamespace))
 		{
 			// Reload configuration
 			config = new Config();
