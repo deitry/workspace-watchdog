@@ -2,7 +2,7 @@
     "name": "workspace-watchdog",
     "displayName": "Workspace Watchdog",
     "description": "Applies different background color to files outside workspace",
-    "version": "0.0.4",
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.40.0"
     },
