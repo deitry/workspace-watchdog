@@ -33,17 +33,25 @@
                 "title": "Configuration of files outside workspace",
                 "properties": {
                     "workspaceWatchdog.backgroundColor": {
-                        "type": ["string"],
+                        "type": [
+                            "string"
+                        ],
                         "default": "rgba(65,65,85,1)",
                         "description": "Background color for files outside workspace"
                     },
                     "workspaceWatchdog.includeFolders": {
-                        "type": ["array", "null"],
+                        "type": [
+                            "array",
+                            "null"
+                        ],
                         "default": null,
                         "description": "If set, will be used to determine which folders belongs to current workspace. If not set, VS Code workspace folders will be used instead."
                     },
                     "workspaceWatchdog.excludeFolders": {
-                        "type": ["array", "null"],
+                        "type": [
+                            "array",
+                            "null"
+                        ],
                         "default": null,
                         "description": "If set, will be used to determine which folders does not belong to current workspace. If not set, all folders outside `includeFolders` will be used instead."
                     }

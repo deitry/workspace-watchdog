@@ -2,6 +2,7 @@
 // https://code.visualstudio.com/api/references/vscode-api#DocumentColorProvider
 
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 const bkgColorProperty = "backgroundColor";
 const includeProperty = "includeFolders";
@@ -33,11 +34,55 @@ class Config
 			this.excludeFolders = conf.get(excludeProperty)
 	}
 
-	isFileIncluded(path: string)
+	/**
+	 * @param absPath Absolute path
+	 */
+	private isFileInWorkspace(absPath: string): boolean
 	{
-		let relPath: string = vscode.workspace.asRelativePath(path, false);
+		// if returned value same as input then file is outside workspace
+		let relPath: string = vscode.workspace.asRelativePath(absPath, false);
+		return relPath != absPath;
+	}
 
-		return relPath == path;
+	private isFileNotExcluded(absPath: string): boolean
+	{
+		if (this.excludeFolders)
+		{
+			return this.excludeFolders.every(folder => {
+				folder = vscode.workspace.asRelativePath(folder, false);
+				let relPath = vscode.workspace.asRelativePath(absPath, false);
+				return path.relative(folder, relPath).includes("..");
+			});
+		}
+
+		// assuming we already checked that it is in included folders
+		return true;
+	}
+
+	/**
+	 * @param absPath Absolute path to file
+	 */
+	isFileIncluded(absPath: string): boolean
+	{
+		if (this.includeFolders)
+		{
+			let included = this.includeFolders.some(folder =>
+			{
+				folder = vscode.workspace.asRelativePath(folder, false);
+				absPath = vscode.workspace.asRelativePath(absPath, false);
+				return !path.relative(folder, absPath).includes("..");
+			});
+			if (!included)
+				return false;
+		}
+		else
+		{
+			// check workspace only if includeFolders is empty
+			if (!this.isFileInWorkspace(absPath))
+				return false;
+		}
+
+		return this.isFileNotExcluded(absPath);
 	}
 }
 
@@ -55,8 +100,7 @@ export function activate(context: vscode.ExtensionContext)
 			return;
 		}
 
-		// if returned value same as input then file is outside workspace
-		if (config.isFileIncluded(e.document.uri.path))
+		if (!config.isFileIncluded(e.document.uri.path))
 		{
 			// TODO: set up REAL background of editor
 
