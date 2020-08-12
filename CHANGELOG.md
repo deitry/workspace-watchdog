@@ -4,6 +4,10 @@ All notable changes to the "workspace-watchdog" extension will be documented in 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.1]
+
+- Fix typo in README.md
+
 ## [1.0.0]
 
 - Bump version to `1.0.0`

@@ -11,7 +11,7 @@ For example, you do not want to mess code from `./src/` with `./src/tmp/`:
 ```json
     "workspaceWatchdog.backgroundColor": "rgba(80,40,50,1)",
     "workspaceWatchdog.excludeFolders": [
-        "./Script/",
+        "./src/tmp/",
     ]
 ```
 
