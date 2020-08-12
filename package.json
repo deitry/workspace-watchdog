@@ -2,21 +2,29 @@
     "name": "workspace-watchdog",
     "displayName": "Workspace Watchdog",
     "description": "Applies different background color to files outside workspace",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "engines": {
         "vscode": "^1.40.0"
     },
     "categories": [
         "Other"
     ],
+    "icon": "resouces/dog_1f415.png",
     "author": {
         "email": "dm.s.vornychev@gmail.com",
         "name": "Dmitriy Vornychev",
         "url": "https://github.com/deitry"
     },
     "keywords": [
+        "code",
+        "focus",
         "workspace",
-        "color"
+        "files",
+        "show",
+        "background",
+        "color",
+        "helper",
+        "confuse"
     ],
     "activationEvents": [
         "*"
@@ -36,7 +44,7 @@
                         "type": [
                             "string"
                         ],
-                        "default": "rgba(65,65,85,1)",
+                        "default": "rgba(80,40,50,1)",
                         "description": "Background color for files outside workspace"
                     },
                     "workspaceWatchdog.includeFolders": {
