@@ -10,4 +10,10 @@
     "typescript.tsc.autoDetect": "off",
     "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
     "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+    // "mochaExplorer.files": "out/test/**/*.js",
+    // "mochaExplorer.require": "source-map-support/register"
+    // "mochaExplorer.require": [
+    //     "ts-node/register",
+    //     "vscode",
+    // ],
 }
